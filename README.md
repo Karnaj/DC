@@ -63,7 +63,7 @@ Pour traduire un fichier `test.v` à l'aide de CoqInE, voici grossièrement ce q
 1. Compiler les fichier à traduire. CoqInE travaille en effet avec les fichiers `.vo` et pas avec les `.v`.
 2. Demander à CoqInE de faire la traduction.
 
-la deuxième étape, bien sûr, n'est pas si simple. Commençons par voir la commande qui correspond à cela (la cible `generate` du Makefile.
+La deuxième étape, bien sûr, n'est pas si simple. Commençons par voir la commande qui correspond à cela (la cible `generate` du Makefile.
 
 ```
 coqc -nois -init-file ../../.coqrc -verbose -R . Top main_debug.v
