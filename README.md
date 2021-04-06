@@ -150,8 +150,10 @@ Une fois que tout ceci est fait, `make` nous permet de faire la traduction (les 
 
 
 ---
+
 Le dossier `encodinges` contiendra, à terme, des encodages qui permettent de
 traduire correctement au moins le fichier `euclidean_axioms.v` (après un `dkprune`, c'est-à-dire les fichiers strictement nécessaires aux axiomes d'Euclide).   
+
 ---
 
 ### TODO
