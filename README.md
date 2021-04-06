@@ -123,7 +123,7 @@ Certains encodages (ou plutôt certains paramètres) permettent de générer des
 
 - `simpl_letins` : *Translate let-in as simpl beta redices or not?*
 - `tpolymorphism` : *Is template polymorphism translation on?*
-- `tploy_cons` : *Is template polymorphism translation on?*.
+- `tploy_cons` : *Are template polymorphic constructors polymorphic?*.
 - `tpoly_code` : *Should template polymorphic inductives parameter sort-irrelevance be obtained through lift elimination (false) or a private code (true)?*
 - `float_univ` : *Is floating universe translation on?*.
 - `constraints` : *Constraints translation? Only has meaning when float is true.*
