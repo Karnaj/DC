@@ -107,6 +107,8 @@ Ce que ces deux derniers exemples de paramètres nous montrent, c'est que les fi
 
 Les différents encodages peuvent être générés avec `make -C encodings`. Ils seront alors dans `encodings/_build`. Dans chaque dossier, il y a un encodage différent. Le fichier `C.config` correspond au `config.v` nécessaire à la traduction, et le `C.dk` au fichier nécessaire pour typechecker les fichiers générés par CoqInE.
 
+Certains encodages (ou plutôt certains paramètres) permettent de générer des fichiers qui ne typechekent pas. Il faut donc choisir notre encodage en fonction des fonctionnalités dont on a besoin. 
+
 ### TODO 
 
 - Regarder les différentes options et les différents encodages.
@@ -116,8 +118,67 @@ Les différents encodages peuvent être générés avec `make -C encodings`. Ils
 - Trouver les bons encodages.
 
 
+
+### Quelques paramètres
+
+- `simpl_letins` : *Translate let-in as simpl beta redices or not?*
+- `tpolymorphism` : *Is template polymorphism translation on?*
+- `tploy_cons` : *Is template polymorphism translation on?*.
+- `tpoly_code` : *Should template polymorphic inductives parameter sort-irrelevance be obtained through lift elimination (false) or a private code (true)?*
+- `float_univ` : *Is floating universe translation on?*.
+- `constraints` : *Constraints translation? Only has meaning when float is true.*
+- `named_univ` : *Should we use universe names or value ? Only has meaning when float is false.*
+- `readable` : *Is (pseudo-)readable translation mode on?*.
+- `use_cast` : *Are we allowed to use casts (for casted lambdas)? Or should we turn them into lifted lambdas instead?*
+- `inlined_fixpoint` : *Translate fixpoints as external body or inlined generic fixpoint operator? This is a very experimental feature.*
+- `caast_arguments` : *Should arguments of an application be systematically be casted to their expected type?*
+
+
+- `lifted_type_pattern` qui vaut `cast`, `lift` ou `recoded` (lié à la cumulativité ? ) 
+
+
+# Testons, testons...
+
+Dans le dossier `tests`, nous avons de quoi tester CoqInE. Le dossier `src` contient les fichiers sources qu'on veut traduire (on peut ne pas tous les traduire). Les fichiers qu'on veut effectivement traduit doivent être mis d'une part dans `import.v` (`main.v` importe ce fichier et c'est `main.v` qui est utilisé pour la traduction), et d'autre part dans `Make` (qui contient la liste des fichiers à compiler avec `coqc`).
+
+
+Si nous prêtons attention au dossier `tests`, nous remaquerons qu'il ne contient pas d'encodage. Ceux-ci sont en effet présents dans le dossier `encodings`. Le but est d'en tester plusieurs de voir quelles fonctionnalités ils supportent (voir le TODO qui suit).
+Les encodages `logipedia` et `upoly_logipedia` correspondent à des encodages utilisés pour Logipedia.
+
+Une fois que tout ceci est fait, `make` nous permet de faire la traduction (les fichiers traduits seront dans un dossier `out`) et de vérifier qu'elle typechecke.
+
+
+
+---
+Le dossier `encodinges` contiendra, à terme, des encodages qui permettent de
+traduire correctement au moins le fichier `euclidean_axioms.v` (après un `dkprune`, c'est-à-dire les fichiers strictement nécessaires aux axiomes d'Euclide).   
+---
+
+### TODO
+
+- Expliquer un peu le Makefile
+- Ajouter une cible `prune` et parler du fichier `prune_config.dk`..
+- Plus d'encodages « viables ».
+- Donner pour les encodages une liste de tests « viables » et de fonctionnalités.
+
+
 # Avec GeoCoq 
 
 Pour traduire GeoCoq, il nous faut donc suivre les différentes étapes que nous avons données. [Ce dépôt](https://github.com/Deducteam/GeoCoqInE-Euclid) nous permet d'avoir des résultats plus facilement.
 
-Attention, `dkcheck` peut prendre plusieurs heures sur les fichiers générés. En particulier, l'option `simpl_letins` (*Translate let-in as simpl beta redices or not ?*) est activée et elle donne des termes plus longs à typechecker. Sans elle, l'étape de typechecking est beaucoup plus rapide (quelques minutes). 
+Attention, `dkcheck` peut prendre plusieurs heures sur les fichiers générés. En particulier, l'option `simpl_letins` (*Translate let-in as simpl beta redices or not ?*) est activée et elle donne des termes plus longs à typechecker. Sans elle, l'étape de typechecking est beaucoup plus rapide (quelques minutes).
+
+
+## Quelques points intéressants
+
+Avec `dkprune`, on peut obtenir la liste des fonctionnalités de la bibliothèque standard de Coq nécessaire à GeoCoq. Cela peut permettre de savoir, à l'aide de quelques tests, quelles fonctionnalités de CoqInE sont nécessaires à la traduction. Par exemple, avec l'encodage `constructors` (modifié pour correspondre au fonctionnement de CoqInE), on ne typechecke pas les fichiers générés en traduisant `euclidean_axioms.v`. Il y a par exemple un problème sur la traduction des fonctionnalités de `Nat`. Mais, avec `dkprune`, on se rend compte que le fichier correspondant n'est pas nécessaire, et on arrive à le typechecker. On pourrait alors essayer d'obtenir l'encodage le plus simple pour cela.
+ 
+Ainsi, on veut un encodage qui nous fournit des fichiers qui sont corrects et tels que les fichiers dont ils dépendent soient également corrects. GeoCoq a besoin des éléments suivants.
+
+- `Coq_Init_Logic`.
+- `Coq_Init_Notations`.
+- `Coq_Init_Prelude`.
+- `Coq_Init_Tauto`.
+
+Il n'y a donc pas beaucoup de choses. On remarque notamment qu'il n'y a pas besoin de `Nat` ! 
+
