@@ -2,3 +2,5 @@
 import.v
 src/nat_example.v
 src/euclidean_axioms.v
+src/simpl_euclidean_axioms.v
+src/section_euclidean_axioms.v

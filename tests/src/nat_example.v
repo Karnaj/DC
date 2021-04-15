@@ -1,1 +1,1 @@
-Definition x:= Type.
+Definition x:= 2.

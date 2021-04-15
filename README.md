@@ -145,7 +145,7 @@ Dans le dossier `tests`, nous avons de quoi tester CoqInE. Le dossier `src` cont
 Si nous prêtons attention au dossier `tests`, nous remaquerons qu'il ne contient pas d'encodage. Ceux-ci sont en effet présents dans le dossier `encodings`. Le but est d'en tester plusieurs de voir quelles fonctionnalités ils supportent (voir le TODO qui suit).
 Les encodages `logipedia` et `upoly_logipedia` correspondent à des encodages utilisés pour Logipedia.
 
-Une fois que tout ceci est fait, `make` nous permet de faire la traduction (les fichiers traduits seront dans un dossier `out`) et de vérifier qu'elle typechecke.
+Une fois que tout ceci est fait, `make` nous permet de faire la traduction (les fichiers traduits seront dans un dossier `out`) et de vérifier qu'elle typechecke. Attention, le chemin de CoqInE doit être précisé dans le Makefile [à cette ligne](https://github.com/Karnaj/DCE/blob/main/tests/Makefile#L36). Dans cet exemple, on considère qu'il est simplement placé deux dossiers plus haut.
 
 
 
